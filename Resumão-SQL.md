@@ -962,7 +962,7 @@ SELECT SUM(estoque_prod) FROM produtos WHERE tipo_prod = 'bebidas';
 
 ### Consultas utilizadas no BigQuery
 
-Renomear as colunas _*regiao_* e _estado_ para regiao e estado respectivamente.
+Renomear as colunas _regiao*_* e _estado_ para regiao e estado respectivamente.
 
 ```sql
 SELECT _regiao_ AS regiao, _estado_ AS estado 
@@ -1070,6 +1070,14 @@ Extraindo datas em diferentes formatos.
 
 ```sql
 /* ANOMES - 6 dígitos (202205) */
+
 SELECT concat(format_date('%Y',data), format_date('%m',data)) as ano_mes
 FROM dados_covid.dados_covid_nacional;
+
+/* OUTRA FORMA */
+
+SELECT CASE WHEN CHAR_LENGTH(CAST(EXTRACT(month FROM _data_) as string)) = 1
+THEN CONCAT(EXTRACT(year FROM _data_), '0',EXTRACT(month FROM _data_))
+ELSE CONCAT(EXTRACT(year FROM _data_),EXTRACT(month FROM _data_))
+END AS ano_mes FROM dados_covid.dados_covid_nacional;
 ```
